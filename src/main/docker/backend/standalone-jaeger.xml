@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<server xmlns="urn:jboss:domain:13.0">
+    <extensions>
+        <extension module="org.wildfly.extension.microprofile.opentracing-smallrye"/>
+    </extensions>
+    <subsystem xmlns="urn:wildfly:microprofile-opentracing-smallrye:2.0" default-tracer="jaeger-demo">
+        <jaeger-tracer name="jaeger-demo">
+            <sampler-configuration sampler-type="const" sampler-param="1.0"/>
+            <sender-configuration sender-binding="jaeger"/>
+            <reporter-configuration reporter-log-spans="true"/>
+        </jaeger-tracer>
+    </subsystem>
+    <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
+<!--        <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>-->
+<!--        <socket-binding name="http" port="${jboss.http.port:8080}"/>-->
+<!--        <socket-binding name="https" port="${jboss.https.port:8443}"/>-->
+<!--        <socket-binding name="txn-recovery-environment" port="4712"/>-->
+<!--        <socket-binding name="txn-status-manager" port="4713"/>-->
+        <outbound-socket-binding name="jaeger">
+            <remote-destination host="jaegertracingio" port="6831"/>
+        </outbound-socket-binding>
+    </socket-binding-group>
+</server>
